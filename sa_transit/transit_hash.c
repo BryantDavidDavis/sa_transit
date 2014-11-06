@@ -1,5 +1,5 @@
 //
-//  main.c
+//  transit_hash.c
 //  sa_transit
 //
 //  Created by Bryant Davis on 11/5/14.
@@ -10,11 +10,3 @@
 #include <stdlib.h>
 #include <string.h>
 #include "transit_graph_build.h"
-
-
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    //printf("Hello, and Welcome to the wonderful world of sa transit!\n");
-    say_hello();
-    return 0;
-}

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		290F6E181A0AFA9B007C5420 /* sa_transit.c in Sources */ = {isa = PBXBuildFile; fileRef = 290F6E171A0AFA9B007C5420 /* sa_transit.c */; };
+		290F6E201A0AFD07007C5420 /* transit_graph_build.c in Sources */ = {isa = PBXBuildFile; fileRef = 290F6E1E1A0AFD07007C5420 /* transit_graph_build.c */; };
+		290F6E231A0AFF65007C5420 /* transit_hash.c in Sources */ = {isa = PBXBuildFile; fileRef = 290F6E211A0AFF65007C5420 /* transit_hash.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,10 @@
 /* Begin PBXFileReference section */
 		290F6E141A0AFA9B007C5420 /* sa_transit */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sa_transit; sourceTree = BUILT_PRODUCTS_DIR; };
 		290F6E171A0AFA9B007C5420 /* sa_transit.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sa_transit.c; sourceTree = "<group>"; };
+		290F6E1E1A0AFD07007C5420 /* transit_graph_build.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = transit_graph_build.c; sourceTree = "<group>"; };
+		290F6E1F1A0AFD07007C5420 /* transit_graph_build.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transit_graph_build.h; sourceTree = "<group>"; };
+		290F6E211A0AFF65007C5420 /* transit_hash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = transit_hash.c; sourceTree = "<group>"; };
+		290F6E221A0AFF65007C5420 /* transit_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transit_hash.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,10 @@
 			isa = PBXGroup;
 			children = (
 				290F6E171A0AFA9B007C5420 /* sa_transit.c */,
+				290F6E1E1A0AFD07007C5420 /* transit_graph_build.c */,
+				290F6E1F1A0AFD07007C5420 /* transit_graph_build.h */,
+				290F6E211A0AFF65007C5420 /* transit_hash.c */,
+				290F6E221A0AFF65007C5420 /* transit_hash.h */,
 			);
 			path = sa_transit;
 			sourceTree = "<group>";
@@ -119,6 +129,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				290F6E181A0AFA9B007C5420 /* sa_transit.c in Sources */,
+				290F6E201A0AFD07007C5420 /* transit_graph_build.c in Sources */,
+				290F6E231A0AFF65007C5420 /* transit_hash.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

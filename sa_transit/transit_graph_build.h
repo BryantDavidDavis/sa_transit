@@ -1,20 +1,19 @@
 //
-//  main.c
+//  transit_graph_build.h
 //  sa_transit
 //
 //  Created by Bryant Davis on 11/5/14.
 //  Copyright (c) 2014 Bryant Davis. All rights reserved.
 //
 
+#ifndef __sa_transit__transit_graph_build__
+#define __sa_transit__transit_graph_build__
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "transit_graph_build.h"
 
+void say_hello(void);
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    //printf("Hello, and Welcome to the wonderful world of sa transit!\n");
-    say_hello();
-    return 0;
-}
+#endif /* defined(__sa_transit__transit_graph_build__) */
