@@ -15,6 +15,7 @@
 int main(int argc, const char * argv[]) {
     // insert code here...
     //printf("Hello, and Welcome to the wonderful world of sa transit!\n");
-    say_hello();
+    //say_hello();
+    graph_build_vertices_edges();
     return 0;
 }
