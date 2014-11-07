@@ -135,22 +135,27 @@ int add_vertex_to_storage(struct vertex* my_vertex, struct vertex_storage** vert
 
 int graph_add_edge(struct edge* new_edge, struct graph_list** my_graph) {
     int source_id = new_edge->source->stop_id;
-    if ((*my_graph)->vertices[source_id] == NULL) {
-        struct edge_list_node* new_node = build_edge_node(new_edge);
+    if ((*my_graph)->vertices[source_id] == NULL) { //this clause appears to work fine
+        struct edge_list_node* new_node = build_edge_node(new_edge); //new node has been successfully created
         if (new_node) {
             (*my_graph)->vertices[source_id] = new_node;
+            return 1;
         } else {
             return 0;
         }
-    } else {
+    } else { //trouble begins here, it worked on the first go around, so what happens later?
         struct edge_list_node* temp = (*my_graph)->vertices[source_id]; //temp is a pointer to to a list node
-        while ((temp->edge->dest->stop_id != new_edge->dest->stop_id)&&(temp != NULL)) { //travers the list until either we have found it or know it's not there
-            temp = temp->next;
+        while ((temp != NULL)&&(temp->edge->dest->stop_id != new_edge->dest->stop_id)) { //travers the list until either we have found it or know it's not there. // the problem is here because now temp is NULL, so there is no edge to find, so by switching the order of the conditions, we short circuit it and avoid the error
+            temp = temp->next; //problem happens after we begin to traverse the list to add another node to the list
         }
         if (temp == NULL) {
             //we have traverse all the edges for this vertex, and found there is not such an edge, so we just insert at the beginning of the list
-            temp->next = (*my_graph)->vertices[source_id];
-            (*my_graph)->vertices[source_id] = temp;
+            //we have discovered that the source vertex is in the array but the edge is not, so we want to add the edge to the beginning of the list
+            //I think we need to build a node here, since it hasn't been built if we are in this loop
+            struct edge_list_node* new_node = build_edge_node(new_edge);
+            new_node->next = (*my_graph)->vertices[source_id];
+            (*my_graph)->vertices[source_id] = new_node;
+            //temp->next = (*my_graph)->vertices[source_id]; //since temp is NULL, we cant assign its next member yet
         } else {
             //we have found such an edge, and just need to add a trip_id to the trips and incrememt num_trips, but what happens to the new edge thing? do we free it?
             //need to check if the number of trips has been reached, and if so reallocate the trips thing
@@ -186,6 +191,7 @@ int graph_build_vertices_edges () {
     //the following reads character by character
     char first_letter;
     struct vertex_storage* vertices = build_vertex_storage();
+    struct graph_list* my_graph = build_graph_list();
     if (vertices == NULL) {
         printf("storage couldn't be built");
         fclose(fp);
@@ -197,8 +203,10 @@ int graph_build_vertices_edges () {
         }; //advances the pointer to the first character of the second line
         int line_number = 1;
         
-        struct vertex* previous_vertex;
-        struct vertex* current_vertex;
+        struct vertex* previous_vertex = NULL;
+        float previous_dist_traveled = 0;
+        struct vertex* current_vertex = NULL;
+        float current_dist_traveled = 0;
         
         for (int i = 0; i < 900; i++) {
             line_number++;
@@ -225,11 +233,25 @@ int graph_build_vertices_edges () {
             
             if ((i == 0) || (stop_seq == 1)) { //this is the first line of the document and there is no previous vertex, and perhaps I need to check if the sequence is 1
                 previous_vertex = build_vertex(stop_id, 0, 0, 0); //this works
+                previous_dist_traveled = shape_dist_traveled;
                 printf("%d\n", add_vertex_to_storage(previous_vertex, &vertices)); //add the vertex to the array
             } else {
                 current_vertex = build_vertex(stop_id, 0, 0, 0); //build the vertex from the line, and store it in current
+                current_dist_traveled = shape_dist_traveled;
                 printf("%d\n", add_vertex_to_storage(current_vertex, &vertices)); //add it to the array
                 //now we need to try to add the edge made up of previous_vertex and current_vertex
+                struct edge* new_edge = build_edge(previous_vertex, current_vertex, current_dist_traveled - previous_dist_traveled, trip_id); //the edge has been successfully created
+                if (new_edge != NULL) {
+                    if(graph_add_edge(new_edge, &my_graph) == 1) {
+                        printf("added to grpah");
+                        previous_vertex = current_vertex;
+                        previous_dist_traveled = current_dist_traveled;
+                    } else {
+                        printf("failed to add to graph\n");
+                    }
+                } else {
+                    printf("new edge not created\n");
+                }
             }
             
         }
