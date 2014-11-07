@@ -51,7 +51,7 @@ struct graph_list {
 
 struct vertex* build_vertex(int stop_id, float latitude, float longitude, char* name);
 struct vertex_storage* build_vertex_storage(void);
-int graph_build_vertices_edges(void);
+int graph_build_vertices_edges(struct graph_list** my_graph, char* filename);
 struct edge_list_node* build_edge_node(struct edge* my_edge);
 struct graph_list* build_graph_list();
 struct edge* build_edge(struct vertex* src, struct vertex* dest, float weight, unsigned long trip_id);

@@ -13,7 +13,7 @@
 
 struct vertex* build_vertex(int stop_id, float latitude, float longitude, char* name);
 struct vertex_storage* build_vertex_storage(void);
-int graph_build_vertices_edges(void);
+int graph_build_vertices_edges(struct graph_list** my_graph, char* filename);
 struct edge_list_node* build_edge_node(struct edge* my_edge);
 struct graph_list* build_graph_list();
 struct edge* build_edge(struct vertex* src, struct vertex* dest, float weight, unsigned long trip_id);
@@ -171,10 +171,10 @@ int graph_add_edge(struct edge* new_edge, struct graph_list** my_graph) {
     return 0;
 }
 
-int graph_build_vertices_edges () {
+int graph_build_vertices_edges (struct graph_list** my_graph, char* filename) {
     //system("pwd");
     FILE* fp;
-    fp = fopen("/Users/bryantdavis/code/practice/C/sa_transit/sa_transit/stop_times.txt", "r");
+    fp = fopen(filename, "r"); //changed this line
     if (fp != NULL) {
         printf("It's open baby\n");
     } else {
@@ -191,7 +191,7 @@ int graph_build_vertices_edges () {
     //the following reads character by character
     char first_letter;
     struct vertex_storage* vertices = build_vertex_storage();
-    struct graph_list* my_graph = build_graph_list();
+    //struct graph_list* my_graph = build_graph_list();
     if (vertices == NULL) {
         printf("storage couldn't be built");
         fclose(fp);
@@ -242,8 +242,8 @@ int graph_build_vertices_edges () {
                 //now we need to try to add the edge made up of previous_vertex and current_vertex
                 struct edge* new_edge = build_edge(previous_vertex, current_vertex, current_dist_traveled - previous_dist_traveled, trip_id); //the edge has been successfully created
                 if (new_edge != NULL) {
-                    if(graph_add_edge(new_edge, &my_graph) == 1) {
-                        printf("added to grpah");
+                    if(graph_add_edge(new_edge, my_graph) == 1) {
+                        printf("added to graph\n");
                         previous_vertex = current_vertex;
                         previous_dist_traveled = current_dist_traveled;
                     } else {
@@ -255,7 +255,6 @@ int graph_build_vertices_edges () {
             }
             
         }
-
     }
     fclose(fp);
     return 1;
