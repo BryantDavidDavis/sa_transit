@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "transit_graph_build.h"
+#include "queue_int.h"
+#include "graph_list_search.h"
 
 struct vertex* build_vertex(int stop_id, float latitude, float longitude, char* name);
 struct vertex_storage* build_vertex_storage(void);
@@ -23,29 +25,34 @@ struct edge* trips_reallocate(struct edge* my_edge);
 
 struct edge* trips_reallocate(struct edge* my_edge){
     long unsigned* trips = malloc(sizeof(long unsigned) * (my_edge->trips_cap) * 2);
-    my_edge->trips_cap = my_edge->trips_cap * 2;
-    for (int i = 0; i < my_edge->num_trips; i++) {
-        trips[i] = my_edge->trips[i];
+    if (trips != NULL) {
+        my_edge->trips_cap = my_edge->trips_cap * 2;
+        for (int i = 0; i < my_edge->num_trips; i++) {
+            trips[i] = my_edge->trips[i];
+        }
+        free(my_edge->trips);
+        my_edge->trips = trips;
+    } else {
+        printf("reallocation of trips failed miserably");
     }
-    free(my_edge->trips);
-    my_edge->trips = trips;
     return my_edge;
 }
 
 struct edge_list_node* build_edge_node(struct edge* my_edge) {
     struct edge_list_node* new_node = malloc(sizeof(struct edge_list_node));
-    if (new_node) {
+    if (new_node != NULL) {
         new_node->edge = my_edge;
         new_node->next = NULL;
         return new_node;
     } else {
+        printf("build_edge_node failed");
         return NULL;
     }
 }
 
 struct graph_list* build_graph_list() {
     struct graph_list* new_graph = malloc(sizeof(struct graph_list));
-    if (new_graph) {
+    if (new_graph != NULL) {
         new_graph->vertices = malloc(sizeof(struct edge_list_node*) * INITIAL_VERTEX_STORE_CAP);
         new_graph->num_vert = 0;
         for (int i = 0; i < INITIAL_VERTEX_STORE_CAP ; i++) {
@@ -53,13 +60,14 @@ struct graph_list* build_graph_list() {
         }
         return new_graph;
     } else {
+        printf("build graph list failed");
         return NULL;
     }
 }
 
 struct edge* build_edge(struct vertex* src, struct vertex* dest, float weight, unsigned long trip_id) {
     struct edge* new_edge = malloc(sizeof(struct edge));
-    if (new_edge) {
+    if (new_edge != NULL) {
         new_edge->source = src;
         new_edge->dest = dest;
         new_edge->weight = weight;
@@ -73,30 +81,34 @@ struct edge* build_edge(struct vertex* src, struct vertex* dest, float weight, u
             new_edge->num_trips = 1;  //stores the first trip on which the edge occurs
             return new_edge;
         } else {
+            printf("build edge trips failed");
             return NULL;
         }
     } else {
+        printf("build new edge failed");
         return NULL;
     }
 }
 
 struct vertex* build_vertex(int stop_id, float latitude, float longitude, char* name) {
     struct vertex* new_vertex = malloc(sizeof(struct vertex));
-    if (new_vertex) {
+    if (new_vertex != NULL) {
         new_vertex->name = malloc(sizeof(char) * INITIAL_STOP_NAME_LENGTH);
-        if (new_vertex->name) {
+        if (new_vertex->name != NULL) {
             new_vertex->stop_id = stop_id;
             new_vertex->latitude = latitude;
             new_vertex->longitude = longitude;
             if (name) {
                 strcpy(name, new_vertex->name);
             } else {
-                new_vertex->name = NULL;
+                new_vertex->name = NULL; //perhaps we don't want to put NULL here? What happens when we want to add a name?
             }
         } else {
+            printf("new_vertex->name allocation failed");
             return NULL;
         }
     } else {
+        printf("new_vertex allocation failed");
         return NULL;
     }
     return new_vertex;
@@ -104,9 +116,9 @@ struct vertex* build_vertex(int stop_id, float latitude, float longitude, char* 
 
 struct vertex_storage* build_vertex_storage() {
     struct vertex_storage* vertices = malloc(sizeof(struct vertex_storage));
-    if (vertices) {
+    if (vertices != NULL) {
         vertices->contents = malloc(sizeof(struct vertex*) * INITIAL_VERTEX_STORE_CAP);
-        if (vertices->contents) {
+        if (vertices->contents != NULL) {
             vertices->size = 0;
             vertices->capacity = INITIAL_VERTEX_STORE_CAP;
             for (int i = 0; i < vertices->capacity; i++) {

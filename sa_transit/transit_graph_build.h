@@ -12,7 +12,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "queue_int.h"
 #include "transit_graph_build.h"
+#include "graph_list_search.h"
+
 
 #define INITIAL_VERTEX_STORE_CAP 20000
 #define INITIAL_TRIP_CAP 50

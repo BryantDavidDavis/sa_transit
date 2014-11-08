@@ -10,6 +10,8 @@
 		290F6E181A0AFA9B007C5420 /* sa_transit.c in Sources */ = {isa = PBXBuildFile; fileRef = 290F6E171A0AFA9B007C5420 /* sa_transit.c */; };
 		290F6E201A0AFD07007C5420 /* transit_graph_build.c in Sources */ = {isa = PBXBuildFile; fileRef = 290F6E1E1A0AFD07007C5420 /* transit_graph_build.c */; };
 		290F6E231A0AFF65007C5420 /* transit_hash.c in Sources */ = {isa = PBXBuildFile; fileRef = 290F6E211A0AFF65007C5420 /* transit_hash.c */; };
+		290F6E2C1A0DD51B007C5420 /* queue_int.c in Sources */ = {isa = PBXBuildFile; fileRef = 290F6E2A1A0DD51B007C5420 /* queue_int.c */; };
+		290FC4021A0DE29800FB9074 /* graph_list_search.c in Sources */ = {isa = PBXBuildFile; fileRef = 290FC4001A0DE29800FB9074 /* graph_list_search.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +34,10 @@
 		290F6E211A0AFF65007C5420 /* transit_hash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = transit_hash.c; sourceTree = "<group>"; };
 		290F6E221A0AFF65007C5420 /* transit_hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transit_hash.h; sourceTree = "<group>"; };
 		290F6E291A0B077A007C5420 /* stop_times.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stop_times.txt; sourceTree = "<group>"; };
+		290F6E2A1A0DD51B007C5420 /* queue_int.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = queue_int.c; sourceTree = "<group>"; };
+		290F6E2B1A0DD51B007C5420 /* queue_int.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queue_int.h; sourceTree = "<group>"; };
+		290FC4001A0DE29800FB9074 /* graph_list_search.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = graph_list_search.c; sourceTree = "<group>"; };
+		290FC4011A0DE29800FB9074 /* graph_list_search.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = graph_list_search.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +76,10 @@
 				290F6E1F1A0AFD07007C5420 /* transit_graph_build.h */,
 				290F6E211A0AFF65007C5420 /* transit_hash.c */,
 				290F6E221A0AFF65007C5420 /* transit_hash.h */,
+				290F6E2A1A0DD51B007C5420 /* queue_int.c */,
+				290F6E2B1A0DD51B007C5420 /* queue_int.h */,
+				290FC4001A0DE29800FB9074 /* graph_list_search.c */,
+				290FC4011A0DE29800FB9074 /* graph_list_search.h */,
 			);
 			path = sa_transit;
 			sourceTree = "<group>";
@@ -132,7 +142,9 @@
 			files = (
 				290F6E181A0AFA9B007C5420 /* sa_transit.c in Sources */,
 				290F6E201A0AFD07007C5420 /* transit_graph_build.c in Sources */,
+				290FC4021A0DE29800FB9074 /* graph_list_search.c in Sources */,
 				290F6E231A0AFF65007C5420 /* transit_hash.c in Sources */,
+				290F6E2C1A0DD51B007C5420 /* queue_int.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +258,7 @@
 				290F6E1D1A0AFA9B007C5420 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

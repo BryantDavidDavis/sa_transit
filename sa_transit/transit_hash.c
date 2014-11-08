@@ -10,3 +10,4 @@
 #include <stdlib.h>
 #include <string.h>
 #include "transit_graph_build.h"
+#include "queue_int.h"
