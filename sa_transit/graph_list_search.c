@@ -18,7 +18,7 @@ static int visited[INITIAL_VERTEX_STORE_CAP] = {0};
 static int parents[INITIAL_VERTEX_STORE_CAP] = {0}; //perhaps I should initialize this to another value that couldn't be a stop_id like -2?
 
 void graph_list_breadth_first_search(struct graph_list* my_graph);
-
+void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id);
 void graph_list_breadth_first_search(struct graph_list* my_graph) {
     struct edge_list_node* temp;
     struct queue_int* my_queue = queue_int_build(INITIAL_QUEUE_INT_CAP);
@@ -43,4 +43,16 @@ void graph_list_breadth_first_search(struct graph_list* my_graph) {
     } else {
         printf("failed to offer item %d to the queue", u);
     }
+}
+
+void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id ) {
+    printf("final stop is %d\n", dest_stop_id);
+    int previous_stop = parents[dest_stop_id];
+    printf("the stop before it was %d\n", previous_stop);
+    while (previous_stop != source_stop_id) {
+        previous_stop = parents[previous_stop];
+        printf("the stop before it was %d\n", previous_stop);
+    }
+    printf("the first stop is the beginning of your journey, stop %d", previous_stop);
+    
 }

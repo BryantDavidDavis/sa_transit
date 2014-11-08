@@ -211,22 +211,22 @@ int graph_build_vertices_edges (struct graph_list** my_graph, char* filename) {
     } else {
         
         while((first_letter = getc(fp)) != '\n') {
-            printf("%c", first_letter);
+            //printf("%c", first_letter);
         }; //advances the pointer to the first character of the second line
-        int line_number = 1;
+        unsigned long line_number = 1;
         
         struct vertex* previous_vertex = NULL;
         float previous_dist_traveled = 0;
         struct vertex* current_vertex = NULL;
         float current_dist_traveled = 0;
         
-        for (int i = 0; i < 900; i++) {
+        for (unsigned long i = 0; i < 1000000; i++) {
             line_number++;
-            printf("printing line number %d\t", line_number);
+            //printf("printing line number %d\t", line_number);
             
             got = fscanf(fp, "%d,%[^,],%[^,],%d,%d,,,,", &trip_id, arrival_time, departure_time, &stop_id, &stop_seq);
             if (got != 5) {
-                printf("error reading file at line %d", i);
+                printf("error reading file at line %lu", i);
                 return 0;
                 //now we need to back up
             } else {
@@ -246,16 +246,16 @@ int graph_build_vertices_edges (struct graph_list** my_graph, char* filename) {
             if ((i == 0) || (stop_seq == 1)) { //this is the first line of the document and there is no previous vertex, and perhaps I need to check if the sequence is 1
                 previous_vertex = build_vertex(stop_id, 0, 0, 0); //this works
                 previous_dist_traveled = shape_dist_traveled;
-                printf("%d\n", add_vertex_to_storage(previous_vertex, &vertices)); //add the vertex to the array
+                //printf("%d\n", add_vertex_to_storage(previous_vertex, &vertices)); //add the vertex to the array
             } else {
                 current_vertex = build_vertex(stop_id, 0, 0, 0); //build the vertex from the line, and store it in current
                 current_dist_traveled = shape_dist_traveled;
-                printf("%d\n", add_vertex_to_storage(current_vertex, &vertices)); //add it to the array
+                //printf("%d\n", add_vertex_to_storage(current_vertex, &vertices)); //add it to the array
                 //now we need to try to add the edge made up of previous_vertex and current_vertex
                 struct edge* new_edge = build_edge(previous_vertex, current_vertex, current_dist_traveled - previous_dist_traveled, trip_id); //the edge has been successfully created
                 if (new_edge != NULL) {
                     if(graph_add_edge(new_edge, my_graph) == 1) {
-                        printf("added to graph\n");
+                        //printf("added to graph\n");
                         previous_vertex = current_vertex;
                         previous_dist_traveled = current_dist_traveled;
                     } else {

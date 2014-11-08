@@ -17,5 +17,5 @@
 
 struct graph_list; //why do I have to give this here?
 void graph_list_breadth_first_search(struct graph_list* my_graph);
-
+void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id);
 #endif /* defined(__sa_transit__graph_list_search__) */
