@@ -19,6 +19,7 @@ static int parents[INITIAL_VERTEX_STORE_CAP] = {0}; //perhaps I should initializ
 
 void graph_list_breadth_first_search(struct graph_list* my_graph);
 void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id);
+
 void graph_list_breadth_first_search(struct graph_list* my_graph) {
     struct edge_list_node* temp;
     struct queue_int* my_queue = queue_int_build(INITIAL_QUEUE_INT_CAP);
@@ -45,11 +46,12 @@ void graph_list_breadth_first_search(struct graph_list* my_graph) {
     }
 }
 
+//the reason why this doesn't work is because we are performing breadth first search in relation to an arbitrary point, whereas we want it relative to a specific starting point
 void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id ) {
     printf("final stop is %d\n", dest_stop_id);
     int previous_stop = parents[dest_stop_id];
     printf("the stop before it was %d\n", previous_stop);
-    while (previous_stop != source_stop_id) {
+    while ((previous_stop != source_stop_id) &&(previous_stop != -1)) {
         previous_stop = parents[previous_stop];
         printf("the stop before it was %d\n", previous_stop);
     }
