@@ -3,6 +3,7 @@
 //  sa_transit
 //
 //  Created by Bryant Davis on 11/5/14.
+//  This project is intended to to model and peform graph-based searches on the sa-transit system
 //  Copyright (c) 2014 Bryant Davis. All rights reserved.
 //
 
