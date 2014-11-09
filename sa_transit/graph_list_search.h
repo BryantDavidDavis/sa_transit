@@ -16,6 +16,6 @@
 #include "queue_int.h"
 
 struct graph_list; //why do I have to give this here?
-void graph_list_breadth_first_search(struct graph_list* my_graph);
-void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id);
+void graph_list_breadth_first_search(int start_place, struct graph_list* my_graph);
+void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id, struct graph_list* my_graph);
 #endif /* defined(__sa_transit__graph_list_search__) */

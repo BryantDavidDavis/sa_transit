@@ -17,16 +17,17 @@
 static int visited[INITIAL_VERTEX_STORE_CAP] = {0};
 static int parents[INITIAL_VERTEX_STORE_CAP] = {0}; //perhaps I should initialize this to another value that couldn't be a stop_id like -2?
 
-void graph_list_breadth_first_search(struct graph_list* my_graph);
-void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id);
+void graph_list_breadth_first_search(int star_place, struct graph_list* my_graph);
+void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id, struct graph_list* my_graph);
 
-void graph_list_breadth_first_search(struct graph_list* my_graph) {
+void graph_list_breadth_first_search(int start_place, struct graph_list* my_graph) {
     struct edge_list_node* temp;
     struct queue_int* my_queue = queue_int_build(INITIAL_QUEUE_INT_CAP);
-    int u = 0;
-    while (my_graph->vertices[u] == NULL) {
-        u++;
-    }
+    int u = start_place;
+    //    int u = 0;
+    //    while (my_graph->vertices[u] == NULL) {
+    //        u++;
+    //    }
     if (queue_int_offer(u, my_queue)) {
         parents[u] = -1;
         while (my_queue->size > 0) {
@@ -47,7 +48,8 @@ void graph_list_breadth_first_search(struct graph_list* my_graph) {
 }
 
 //the reason why this doesn't work is because we are performing breadth first search in relation to an arbitrary point, whereas we want it relative to a specific starting point
-void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id ) {
+void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id, struct graph_list* my_graph) {
+    graph_list_breadth_first_search(source_stop_id, my_graph);
     printf("final stop is %d\n", dest_stop_id);
     int previous_stop = parents[dest_stop_id];
     printf("the stop before it was %d\n", previous_stop);
