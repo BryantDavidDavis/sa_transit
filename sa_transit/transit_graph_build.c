@@ -220,10 +220,8 @@ int graph_build_vertices_edges (struct graph_list** my_graph, char* filename) {
         struct vertex* current_vertex = NULL;
         float current_dist_traveled = 0;
         
-        for (unsigned long i = 0; i < 1000000; i++) {
+        for (unsigned long i = 0; i < 1476913; i++) {
             line_number++;
-            //printf("printing line number %d\t", line_number);
-            
             got = fscanf(fp, "%d,%[^,],%[^,],%d,%d,,,,", &trip_id, arrival_time, departure_time, &stop_id, &stop_seq);
             if (got != 5) {
                 printf("error reading file at line %lu", i);

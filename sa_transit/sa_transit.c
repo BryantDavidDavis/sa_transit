@@ -14,7 +14,7 @@
 #include "transit_graph_build.h"
 #include "queue_int.h"
 
-
+int* depth_parents;
 
 int main(int argc, const char * argv[]) {
     
@@ -26,5 +26,10 @@ int main(int argc, const char * argv[]) {
     //printf("%f\t", (my_graph)->vertices[12380]->edge->weight);
     //graph_list_breadth_first_search(28, my_graph);
     ///graph_list_get_parent_short_path(3650,11399, my_graph);
+    
+    struct x_order* discovery_order = x_order_build();
+    struct x_order* finished_order = x_order_build();
+    graph_list_depth_first_search(discovery_order, finished_order, 2, my_graph);
+    depth_first_print(discovery_order, my_graph);
     return 0;
 }
