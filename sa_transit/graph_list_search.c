@@ -16,9 +16,13 @@
 //declaring these two array static hides them inside this file, we will then probably need getter functions now
 static int visited[INITIAL_VERTEX_STORE_CAP] = {0};
 static int parents[INITIAL_VERTEX_STORE_CAP] = {0}; //perhaps I should initialize this to another value that couldn't be a stop_id like -2?
+static int depth_parents[INITIAL_VERTEX_STORE_CAP] = {0};
 
 void graph_list_breadth_first_search(int star_place, struct graph_list* my_graph);
 void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id, struct graph_list* my_graph);
+struct x_order* x_order_build(void);
+void graph_list_depth_first_search(struct x_order* discovery_order, struct x_order* finished_order, int start_place, struct graph_list* my_graph);
+void depth_first_print(struct x_order* discovery_order, struct graph_list* my_graph);
 
 void graph_list_breadth_first_search(int start_place, struct graph_list* my_graph) {
     struct edge_list_node* temp;
@@ -60,3 +64,53 @@ void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id, stru
     printf("the first stop is the beginning of your journey, stop %d", previous_stop);
     
 }
+
+struct x_order* x_order_build() {
+    struct x_order* new_order = malloc(sizeof(struct x_order));
+    if (new_order != NULL) {
+        new_order->data = malloc(sizeof(int) * INITIAL_VERTEX_STORE_CAP);
+        if (new_order->data != NULL) {
+            new_order->size = 0;
+            for (int i = 0; i < INITIAL_VERTEX_STORE_CAP; i++) {
+                new_order->data[i] = 0;
+            }
+            return new_order;
+        } else {
+            return NULL;
+        }
+    } else {
+        return NULL;
+    }
+}
+
+void graph_list_depth_first_search(struct x_order* discovery_order, struct x_order* finished_order, int start_place, struct graph_list* my_graph) {
+    
+    discovery_order->data[discovery_order->size] = start_place;
+    if (discovery_order->size == 0) {
+        depth_parents[start_place] = -1;
+    }
+    discovery_order->size++;
+    
+    struct edge_list_node* temp = my_graph->vertices[start_place];
+    
+    while (temp != NULL) { //while the vertex exists and is not in the parents array
+        //actually before we add it to the parents array we need to make sure that it isn't already there
+        if (depth_parents[temp->edge->dest->stop_id] == 0) {
+            depth_parents[temp->edge->dest->stop_id] = start_place;
+            printf("%d items visited.  Now stop %d's parent is now set to %d\n", discovery_order->size, temp->edge->dest->stop_id, start_place);
+            graph_list_depth_first_search(discovery_order, finished_order, temp->edge->dest->stop_id, my_graph);
+        }
+        temp = temp->next;
+    }
+    
+    finished_order->data[finished_order->size] = start_place;
+    finished_order->size++;
+}
+
+void depth_first_print(struct x_order* discovery_order, struct graph_list* my_graph) {
+    for (int i = 0; i < discovery_order->size; i++) {
+        printf("bus_stop %d\n", discovery_order->data[i]);
+    }
+    printf("\n");
+}
+//void graph_list_depth_first_search(
