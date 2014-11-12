@@ -154,17 +154,19 @@ struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int
                     }
                 }
             }
-        }
-        my_result->v_s[smallest] = 0;
-        my_result->s[smallest] = 1;
-        int u = smallest;
-        int v = 0;
-        temp = my_graph->vertices[u];
-        while (temp != NULL) {
-            v = temp->edge->dest->stop_id;
-            if ((my_result->d[v] == NOT_ADJACENT)||((my_result->d[u] + temp->edge->weight) < my_result->d[v])) {
-                my_result->d[v] = my_result->d[u] + temp->edge->weight;
-                my_result->p[v] = u;
+        
+            my_result->v_s[smallest] = 0;
+            my_result->s[smallest] = 1;
+            int u = smallest;
+            int v = 0;
+            temp = my_graph->vertices[u];
+            while (temp != NULL) {
+                v = temp->edge->dest->stop_id;
+                if ((my_result->d[v] == NOT_ADJACENT)||((my_result->d[u] + temp->edge->weight) < my_result->d[v])) {
+                    my_result->d[v] = my_result->d[u] + temp->edge->weight;
+                    my_result->p[v] = u;
+                }
+                temp = temp->next;
             }
         }
     }

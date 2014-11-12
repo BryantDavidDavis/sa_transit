@@ -276,7 +276,7 @@ int* graph_list_build_vertex_array(struct graph_list* my_graph) {
         if (my_graph->vertices[i] != NULL) {
             temp = my_graph->vertices[i];
             stops[i] = 1;
-            while (temp != NULL) {
+            while (temp->next != NULL) {
                 temp = temp->next;
                 stops[temp->edge->dest->stop_id] = 1;
             }
