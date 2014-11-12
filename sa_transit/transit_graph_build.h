@@ -59,5 +59,6 @@ struct edge_list_node* build_edge_node(struct edge* my_edge);
 struct graph_list* build_graph_list();
 struct edge* build_edge(struct vertex* src, struct vertex* dest, float weight, unsigned long trip_id);
 int graph_add_edge(struct edge* new_edge, struct graph_list** my_graph);
+int* graph_list_build_vertex_array(struct graph_list* my_graph);
 
 #endif /* defined(__sa_transit__transit_graph_build__) */

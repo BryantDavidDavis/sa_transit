@@ -23,6 +23,7 @@ void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id, stru
 struct x_order* x_order_build(void);
 void graph_list_depth_first_search(struct x_order* discovery_order, struct x_order* finished_order, int start_place, struct graph_list* my_graph);
 void depth_first_print(struct x_order* discovery_order, struct graph_list* my_graph);
+struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int start_place);
 
 void graph_list_breadth_first_search(int start_place, struct graph_list* my_graph) {
     struct edge_list_node* temp;
@@ -113,4 +114,3 @@ void depth_first_print(struct x_order* discovery_order, struct graph_list* my_gr
     }
     printf("\n");
 }
-//void graph_list_depth_first_search(
