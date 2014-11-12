@@ -22,6 +22,7 @@ struct edge* build_edge(struct vertex* src, struct vertex* dest, float weight, u
 int graph_add_edge(struct edge* new_edge, struct graph_list** my_graph);
 float edge_get_weight(); //need to figure this out
 struct edge* trips_reallocate(struct edge* my_edge);
+int* graph_list_build_vertex_array(struct graph_list* my_graph);  //possibly unneccessary since we have a build_vertex_storage function but lets handle this later
 
 struct edge* trips_reallocate(struct edge* my_edge){
     long unsigned* trips = malloc(sizeof(long unsigned) * (my_edge->trips_cap) * 2);
@@ -147,7 +148,7 @@ int add_vertex_to_storage(struct vertex* my_vertex, struct vertex_storage** vert
 
 int graph_add_edge(struct edge* new_edge, struct graph_list** my_graph) {
     int source_id = new_edge->source->stop_id;
-    if ((*my_graph)->vertices[source_id] == NULL) { //this clause appears to work fine
+    if ((*my_graph)->vertices[source_id] == NULL) {
         struct edge_list_node* new_node = build_edge_node(new_edge); //new node has been successfully created
         if (new_node) {
             (*my_graph)->vertices[source_id] = new_node;
@@ -155,19 +156,17 @@ int graph_add_edge(struct edge* new_edge, struct graph_list** my_graph) {
         } else {
             return 0;
         }
-    } else { //trouble begins here, it worked on the first go around, so what happens later?
-        struct edge_list_node* temp = (*my_graph)->vertices[source_id]; //temp is a pointer to to a list node
-        while ((temp != NULL)&&(temp->edge->dest->stop_id != new_edge->dest->stop_id)) { //travers the list until either we have found it or know it's not there. // the problem is here because now temp is NULL, so there is no edge to find, so by switching the order of the conditions, we short circuit it and avoid the error
-            temp = temp->next; //problem happens after we begin to traverse the list to add another node to the list
+    } else {
+        struct edge_list_node* temp = (*my_graph)->vertices[source_id];
+        while ((temp != NULL)&&(temp->edge->dest->stop_id != new_edge->dest->stop_id)) { //traverse the list until either we have found it or know it's not there.
+            temp = temp->next;
         }
         if (temp == NULL) {
             //we have traverse all the edges for this vertex, and found there is not such an edge, so we just insert at the beginning of the list
             //we have discovered that the source vertex is in the array but the edge is not, so we want to add the edge to the beginning of the list
-            //I think we need to build a node here, since it hasn't been built if we are in this loop
             struct edge_list_node* new_node = build_edge_node(new_edge);
             new_node->next = (*my_graph)->vertices[source_id];
             (*my_graph)->vertices[source_id] = new_node;
-            //temp->next = (*my_graph)->vertices[source_id]; //since temp is NULL, we cant assign its next member yet
         } else {
             //we have found such an edge, and just need to add a trip_id to the trips and incrememt num_trips, but what happens to the new edge thing? do we free it?
             //need to check if the number of trips has been reached, and if so reallocate the trips thing
@@ -175,7 +174,7 @@ int graph_add_edge(struct edge* new_edge, struct graph_list** my_graph) {
                 //need to reallocate first
                 temp->edge = trips_reallocate(temp->edge);
             }
-            temp->edge->trips[temp->edge->num_trips] = new_edge->trips[0]; //I think that the edge trips member should have one element for a new edge
+            temp->edge->trips[temp->edge->num_trips] = new_edge->trips[0];
             temp->edge->num_trips++;
         }
         return 1;
@@ -270,34 +269,20 @@ int graph_build_vertices_edges (struct graph_list** my_graph, char* filename) {
     return 1;
 }
 
-//we don't need this function for now, because we know how many the maximum number of stops is
-//int vertex_storage_reallocate(struct vertex_storage** old_storage) {
-//    struct vertex_storage* new_storage = malloc(sizeof(struct vertex_storage));
-//    if (new_storage) {
-//        new_storage->contents = malloc(sizeof(struct vertex*) * ((*old_storage)->capacity) * 2);
-//        if (new_storage->contents) {
-//            new_storage->size = 0;
-//            for (unsigned long i = 0; i < (*old_storage)->size; i++) {
-//                new_storage->contents[i] = (*old_storage)->contents[i];
-//                new_storage->size++;
-//            }
-//            for (unsigned long i = new_storage->size; i < new_storage->capacity; i++) {
-//                new_storage->contents[i] = NULL;
-//            }
-//            free(*old_storage);
-//            *old_storage = new_storage;
-//            return 1;
-//        } else {
-//            return 0;
-//        }
-//    } else {
-//        return 0;
-//    }
-//}
-
-
-//unsigned long graph_edge_hashcode(const struct vertex* first, const struct vertex* second) {
-//    unsigned long hashcode = 0;
-//    hashcode = first->stop_id*10000 + second->stop_id; //we need also to take the modulus of the hashtable length
-//    return hashcode;
-//}
+int* graph_list_build_vertex_array(struct graph_list* my_graph) {
+    int* stops = malloc(sizeof(int)*INITIAL_VERTEX_STORE_CAP);
+    struct edge_list_node* temp;
+    for (int i = 0; i < INITIAL_VERTEX_STORE_CAP; i++) {
+        if (my_graph->vertices[i] != NULL) {
+            temp = my_graph->vertices[i];
+            stops[i] = 1;
+            while (temp != NULL) {
+                temp = temp->next;
+                stops[temp->edge->dest->stop_id] = 1;
+            }
+        } else {
+            stops[i] = 0;
+        }
+    }
+    return stops;
+}
