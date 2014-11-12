@@ -114,3 +114,59 @@ void depth_first_print(struct x_order* discovery_order, struct graph_list* my_gr
     }
     printf("\n");
 }
+
+struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int start_place) {
+    struct dijkstra_result* my_result = malloc(sizeof(struct dijkstra_result));
+    if (my_result != NULL) {
+        my_result->v_s = graph_list_build_vertex_array(my_graph);
+        my_result->s = malloc(sizeof(int)* INITIAL_VERTEX_STORE_CAP);
+        my_result->d = malloc(sizeof(float)* INITIAL_VERTEX_STORE_CAP);
+        my_result->p = malloc(sizeof(int)* INITIAL_VERTEX_STORE_CAP);
+        if ((my_result->v_s == NULL)||(my_result->s == NULL)||(my_result->d == NULL)||(my_result->p == NULL)) {
+            return NULL;
+        }
+    } else {
+        return NULL;
+    }
+
+    for (int i = 0; i < INITIAL_VERTEX_STORE_CAP; i++) {
+        my_result->s[i] = 0;
+        my_result->p[i] = start_place;
+        my_result->d[i] = NOT_ADJACENT;
+    }
+    my_result->s[start_place] = 1;
+    my_result->v_s[start_place] = 0;
+    struct edge_list_node* temp = my_graph->vertices[start_place];
+    while (temp != NULL) {
+        my_result->d[temp->edge->dest->stop_id] = temp->edge->weight;
+        temp = temp->next;
+    }
+    //now that the result struct has been properly allocated and initialized we can perform the algorithm
+    for (int i = 1; i < INITIAL_VERTEX_STORE_CAP; i++) {
+        int smallest = 62000; //initialize to an arbitrarily large number beyond the bounds of the vertex store cap
+        if (my_result->v_s[i] != 0) {
+            for (int j = i; j < INITIAL_VERTEX_STORE_CAP; j++) {
+                if (my_result->v_s[j] != 0) {
+                    if (j == i) {
+                        smallest = j;
+                    } else if (my_result->d[j] < my_result->d[smallest]) {
+                        smallest = j;
+                    }
+                }
+            }
+        }
+        my_result->v_s[smallest] = 0;
+        my_result->s[smallest] = 1;
+        int u = smallest;
+        int v = 0;
+        temp = my_graph->vertices[u];
+        while (temp != NULL) {
+            v = temp->edge->dest->stop_id;
+            if ((my_result->d[v] == NOT_ADJACENT)||((my_result->d[u] + temp->edge->weight) < my_result->d[v])) {
+                my_result->d[v] = my_result->d[u] + temp->edge->weight;
+                my_result->p[v] = u;
+            }
+        }
+    }
+    return my_result;
+}

@@ -15,8 +15,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "transit_graph_build.h"
-#include "queue_int.h"
 #include "graph_list_search.h"
+
+struct graph_list;
 
 struct queue_int {
     int* data;
