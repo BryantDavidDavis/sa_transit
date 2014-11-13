@@ -187,7 +187,7 @@ int graph_build_vertices_edges (struct graph_list** my_graph, char* filename) {
     FILE* fp;
     fp = fopen(filename, "r"); //changed this line
     if (fp != NULL) {
-        printf("It's open baby\n");
+        printf("the transit file has been opened, oh yeah...\n");
     } else {
         printf("nope, can't open file.  Nice try though");
     }
@@ -219,7 +219,7 @@ int graph_build_vertices_edges (struct graph_list** my_graph, char* filename) {
         struct vertex* current_vertex = NULL;
         float current_dist_traveled = 0;
         
-        for (unsigned long i = 0; i < 1476913; i++) {
+        for (unsigned long i = 0; i < 1476913; i++) { //this is the last line of the san antonio bus file, need to fix to stop at EOF
             line_number++;
             got = fscanf(fp, "%d,%[^,],%[^,],%d,%d,,,,", &trip_id, arrival_time, departure_time, &stop_id, &stop_seq);
             if (got != 5) {
