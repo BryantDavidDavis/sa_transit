@@ -13,8 +13,6 @@
 #include "queue_int.h"
 #include "graph_list_search.h"
 
-
-
 //declaring these two array static hides them inside this file, we will then probably need getter functions now
 static int visited[INITIAL_VERTEX_STORE_CAP] = {0};
 static int parents[INITIAL_VERTEX_STORE_CAP] = {0}; //perhaps I should initialize this to another value that couldn't be a stop_id like -2?
@@ -32,10 +30,6 @@ void graph_list_breadth_first_search(int start_place, struct graph_list* my_grap
     struct edge_list_node* temp;
     struct queue_int* my_queue = queue_int_build(INITIAL_QUEUE_INT_CAP);
     int u = start_place;
-    //    int u = 0;
-    //    while (my_graph->vertices[u] == NULL) {
-    //        u++;
-    //    }
     if (queue_int_offer(u, my_queue)) {
         parents[u] = -1;
         while (my_queue->size > 0) {
@@ -55,7 +49,6 @@ void graph_list_breadth_first_search(int start_place, struct graph_list* my_grap
     }
 }
 
-//the reason why this doesn't work is because we are performing breadth first search in relation to an arbitrary point, whereas we want it relative to a specific starting point
 void graph_list_get_parent_short_path(int source_stop_id, int dest_stop_id, struct graph_list* my_graph) {
     graph_list_breadth_first_search(source_stop_id, my_graph);
     printf("final stop is %d\n", dest_stop_id);
@@ -119,7 +112,6 @@ void depth_first_print(struct x_order* discovery_order, struct graph_list* my_gr
 }
 
 struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int start_place) {
-    printf("%d\n", NOT_ADJACENT);
     struct dijkstra_result* my_result = malloc(sizeof(struct dijkstra_result));
     if (my_result != NULL) {
         my_result->v_s = graph_list_build_vertex_array(my_graph);
@@ -152,15 +144,15 @@ struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int
     for (int i = 1; i < INITIAL_VERTEX_STORE_CAP; i++) { //basically we want to do this until v-s is empty, so this way isn't efficient but it will get the job done
         int smallest = INT_MAX; //initialize to an arbitrarily large number beyond the bounds of the vertex store cap this is simply to initialize it, doesnt mean anything
         int first_iteration = 1; //will change to zero, so we initialize smallest to the proper index once
-        for (int j = 1; j < INITIAL_VERTEX_STORE_CAP; j++) { //I think one problem is that each time we perform this we are deducting items unneccessarily. edit: we have fixed this to start at beginning, the checking the zero takes care of the problem of v-s versus s, so no need to
-            if (my_result->v_s[j] != 0) { //this condition needs to be fixed, j should iterate through all the array elements, and if the element is still in v-s, we then check if the element in d[j] is less than the smallest found element, then we set it to that.
+        for (int j = 1; j < INITIAL_VERTEX_STORE_CAP; j++) {
+            if (my_result->v_s[j] != 0) {
                 // since smallest is an index, we need to set smallest to a possible index before we compare it as an index.
                 //lets use a flag to identify the first iteration, and set smallest on that first iteration
                 if (first_iteration == 1) {
                     //printf("smallest index in v-s is %d.  let's find smallest value of d[u]...", j);
                     smallest = j;
                     first_iteration = 0;
-                } else if (my_result->d[j] < my_result->d[smallest]) { //is there a problem due to the fact we assigned an int to a floating point?
+                } else if (my_result->d[j] < my_result->d[smallest]) {
                     smallest = j;
                 }
             }
