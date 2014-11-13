@@ -29,7 +29,7 @@ struct dijkstra_result {
     int* v_s;
     float* d;
     int* p;
-    
+    int start_place;
 };
 
 void graph_list_breadth_first_search(int start_place, struct graph_list* my_graph);

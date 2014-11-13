@@ -5,7 +5,7 @@
 //  Created by Bryant Davis on 11/5/14.
 //  This project is intended to to model and peform graph-based searches on the sa-transit system
 //  Copyright (c) 2014 Bryant Davis. All rights reserved.
-//
+//  Bus routes, stops, and times used to create this graph is provided by Via Metropolitan Transit
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
     //struct x_order* finished_order = x_order_build();
     //graph_list_depth_first_search(discovery_order, finished_order, 2, my_graph);
     //depth_first_print(discovery_order, my_graph);
-    struct dijkstra_result* my_result = graph_list_dijkstra_alg(my_graph, 23);
+    struct dijkstra_result* my_result = graph_list_dijkstra_alg(my_graph, 4);
     dijkstra_print_result(my_result, 6206);
     //so now that we have obtained our result it's time to check it to see what it tells us
     return 0;
