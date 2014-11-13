@@ -4,7 +4,7 @@
 //
 //  Created by Bryant Davis on 11/5/14.
 //  Copyright (c) 2014 Bryant Davis. All rights reserved.
-//
+//  Bus routes, stops, and times used to create this graph is provided by Via Metropolitan Transit
 
 #include <stdio.h>
 #include <stdlib.h>

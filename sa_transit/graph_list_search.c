@@ -4,7 +4,7 @@
 //
 //  Created by Bryant Davis on 11/7/14.
 //  Copyright (c) 2014 Bryant Davis. All rights reserved.
-//
+//  Bus routes, stops, and times used to create this graph is provided by Via Metropolitan Transit
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -126,6 +126,7 @@ struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int
         my_result->s = malloc(sizeof(int)* INITIAL_VERTEX_STORE_CAP);
         my_result->d = malloc(sizeof(float)* INITIAL_VERTEX_STORE_CAP);
         my_result->p = malloc(sizeof(int)* INITIAL_VERTEX_STORE_CAP);
+        my_result->start_place = start_place;
         if ((my_result->v_s == NULL)||(my_result->s == NULL)||(my_result->d == NULL)||(my_result->p == NULL)) {
             return NULL;
         }
@@ -189,9 +190,14 @@ struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int
 
 void dijkstra_print_result(struct dijkstra_result* my_result, int destination) {
     int i = destination;
-    while (i != 23) {
+    while (i != my_result->start_place) {
         printf("current stop is %d\t", i);
-        printf("to get there we traveled %f miles from %d, and %f miles from origin at stop 2\n", (my_result->d[i] - my_result->d[my_result->p[i]]), my_result->p[i], my_result->d[i]);
-        i = my_result->p[i];
+        if (my_result->p[i] == my_result->start_place) {
+            printf("to get there we traveled %f miles from the origin at stop %d\n", my_result->d[i], my_result->start_place);
+            break;
+        } else {
+            printf("to get there we traveled %f miles from %d, and %f miles from origin at stop %d\n", (my_result->d[i] - my_result->d[my_result->p[i]]), my_result->p[i], my_result->d[i], my_result->start_place);
+            i = my_result->p[i];
+        }
     }
 }
