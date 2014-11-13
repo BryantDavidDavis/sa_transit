@@ -9,14 +9,14 @@
 #ifndef __sa_transit__graph_list_search__
 #define __sa_transit__graph_list_search__
 
-#define NOT_ADJACENT -999
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "transit_graph_build.h"
 #include "queue_int.h"
 
+#define NOT_ADJACENT INT_MAX
 struct graph_list; //why do I have to give this here?
 
 struct x_order {
@@ -38,5 +38,5 @@ struct x_order* x_order_build(void);
 void graph_list_depth_first_search(struct x_order* discovery_order, struct x_order* finished_order, int start_place, struct graph_list* my_graph);
 void depth_first_print(struct x_order* discovery_order, struct graph_list* my_graph);
 struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int start_place);
-
+void dijkstra_print_result(struct dijkstra_result* my_result, int destination);
 #endif /* defined(__sa_transit__graph_list_search__) */

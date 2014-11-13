@@ -31,6 +31,8 @@ int main(int argc, const char * argv[]) {
     //struct x_order* finished_order = x_order_build();
     //graph_list_depth_first_search(discovery_order, finished_order, 2, my_graph);
     //depth_first_print(discovery_order, my_graph);
-    struct dijkstra_result* my_result = graph_list_dijkstra_alg(my_graph, 2);
+    struct dijkstra_result* my_result = graph_list_dijkstra_alg(my_graph, 23);
+    dijkstra_print_result(my_result, 6206);
+    //so now that we have obtained our result it's time to check it to see what it tells us
     return 0;
 }

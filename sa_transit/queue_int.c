@@ -101,5 +101,4 @@ int queue_int_reallocate(struct queue_int* old_queue) {
     } else {
         return 0;
     }
-    
 }

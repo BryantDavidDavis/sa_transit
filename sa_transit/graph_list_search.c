@@ -8,9 +8,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include "transit_graph_build.h"
 #include "queue_int.h"
 #include "graph_list_search.h"
+
 
 
 //declaring these two array static hides them inside this file, we will then probably need getter functions now
@@ -24,6 +26,7 @@ struct x_order* x_order_build(void);
 void graph_list_depth_first_search(struct x_order* discovery_order, struct x_order* finished_order, int start_place, struct graph_list* my_graph);
 void depth_first_print(struct x_order* discovery_order, struct graph_list* my_graph);
 struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int start_place);
+void dijkstra_print_result(struct dijkstra_result* my_result, int destination);
 
 void graph_list_breadth_first_search(int start_place, struct graph_list* my_graph) {
     struct edge_list_node* temp;
@@ -116,6 +119,7 @@ void depth_first_print(struct x_order* discovery_order, struct graph_list* my_gr
 }
 
 struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int start_place) {
+    printf("%d\n", NOT_ADJACENT);
     struct dijkstra_result* my_result = malloc(sizeof(struct dijkstra_result));
     if (my_result != NULL) {
         my_result->v_s = graph_list_build_vertex_array(my_graph);
@@ -131,6 +135,7 @@ struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int
 
     for (int i = 0; i < INITIAL_VERTEX_STORE_CAP; i++) {
         my_result->s[i] = 0;
+        //what do we do in this case, because the arrays p and d shouldn't contain start_place, so do we set them equal to something like -1?
         my_result->p[i] = start_place;
         my_result->d[i] = NOT_ADJACENT;
     }
@@ -141,20 +146,28 @@ struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int
         my_result->d[temp->edge->dest->stop_id] = temp->edge->weight;
         temp = temp->next;
     }
+    
     //now that the result struct has been properly allocated and initialized we can perform the algorithm
-    for (int i = 1; i < INITIAL_VERTEX_STORE_CAP; i++) {
-        int smallest = 62000; //initialize to an arbitrarily large number beyond the bounds of the vertex store cap
-        if (my_result->v_s[i] != 0) {
-            for (int j = i; j < INITIAL_VERTEX_STORE_CAP; j++) {
-                if (my_result->v_s[j] != 0) {
-                    if (j == i) {
-                        smallest = j;
-                    } else if (my_result->d[j] < my_result->d[smallest]) {
-                        smallest = j;
-                    }
+    for (int i = 1; i < INITIAL_VERTEX_STORE_CAP; i++) { //basically we want to do this until v-s is empty, so this way isn't efficient but it will get the job done
+        int smallest = INT_MAX; //initialize to an arbitrarily large number beyond the bounds of the vertex store cap this is simply to initialize it, doesnt mean anything
+        int first_iteration = 1; //will change to zero, so we initialize smallest to the proper index once
+        for (int j = 1; j < INITIAL_VERTEX_STORE_CAP; j++) { //I think one problem is that each time we perform this we are deducting items unneccessarily. edit: we have fixed this to start at beginning, the checking the zero takes care of the problem of v-s versus s, so no need to
+            if (my_result->v_s[j] != 0) { //this condition needs to be fixed, j should iterate through all the array elements, and if the element is still in v-s, we then check if the element in d[j] is less than the smallest found element, then we set it to that.
+                // since smallest is an index, we need to set smallest to a possible index before we compare it as an index.
+                //lets use a flag to identify the first iteration, and set smallest on that first iteration
+                if (first_iteration == 1) {
+                    //printf("smallest index in v-s is %d.  let's find smallest value of d[u]...", j);
+                    smallest = j;
+                    first_iteration = 0;
+                } else if (my_result->d[j] < my_result->d[smallest]) { //is there a problem due to the fact we assigned an int to a floating point?
+                    smallest = j;
                 }
             }
-        
+            
+        }
+        //now that the iteration has run its course and we have removed all stops from v-s, we have to avoid the second portion, let's use another flag, or the same flag
+        if (first_iteration == 0) { //we have found a stop remaning in v-s, otherwise it is empty
+            //printf("we found stop %d, with intermediate stop %d and %f from stop 2\n", smallest, my_result->p[smallest], my_result->d[smallest]);
             my_result->v_s[smallest] = 0;
             my_result->s[smallest] = 1;
             int u = smallest;
@@ -162,8 +175,9 @@ struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int
             temp = my_graph->vertices[u];
             while (temp != NULL) {
                 v = temp->edge->dest->stop_id;
-                if ((my_result->d[v] == NOT_ADJACENT)||((my_result->d[u] + temp->edge->weight) < my_result->d[v])) {
+                if ((my_result->d[u] + temp->edge->weight) < my_result->d[v]) {
                     my_result->d[v] = my_result->d[u] + temp->edge->weight;
+                    //printf("updating stop %d to distance of %f from intermediate stop %d\n", v, temp->edge->weight, u);
                     my_result->p[v] = u;
                 }
                 temp = temp->next;
@@ -171,4 +185,13 @@ struct dijkstra_result* graph_list_dijkstra_alg(struct graph_list* my_graph, int
         }
     }
     return my_result;
+}
+
+void dijkstra_print_result(struct dijkstra_result* my_result, int destination) {
+    int i = destination;
+    while (i != 23) {
+        printf("current stop is %d\t", i);
+        printf("to get there we traveled %f miles from %d, and %f miles from origin at stop 2\n", (my_result->d[i] - my_result->d[my_result->p[i]]), my_result->p[i], my_result->d[i]);
+        i = my_result->p[i];
+    }
 }
