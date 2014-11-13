@@ -52,6 +52,8 @@ struct graph_list {
     int num_vert;
 };
 
+struct queue_int;
+
 struct vertex* build_vertex(int stop_id, float latitude, float longitude, char* name);
 struct vertex_storage* build_vertex_storage(void);
 int graph_build_vertices_edges(struct graph_list** my_graph, char* filename);
