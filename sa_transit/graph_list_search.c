@@ -11,7 +11,7 @@
 #include <limits.h>
 #include "transit_graph_build.h"
 #include "queue_int.h"
-#include "graph_list_search.h"
+#include "graph_list_search.h"d
 
 //declaring these two array static hides them inside this file, we will then probably need getter functions now
 static int visited[INITIAL_VERTEX_STORE_CAP] = {0};
